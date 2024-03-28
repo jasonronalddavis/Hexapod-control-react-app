@@ -1,6 +1,5 @@
-// Hexapod-control-react-app/peanut-app/src/BlueTooth/bluetoothServices.js
-// Hexapod-control-react-app/peanut-app/src/BlueTooth/bluetoothServices.js
-
+// BluetoothService.js
+import React, { useState } from 'react';
 class BluetoothService {
   async connect() {
     try {

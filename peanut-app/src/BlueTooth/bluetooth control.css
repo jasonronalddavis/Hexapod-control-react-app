@@ -1,9 +1,19 @@
-.buttons{
-    z-index: 20;
-    min-height: 200vh;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: rgb(0, 0, 0);
-    position: relative;
+/* Add styles for the slider */
+.bluetooth{
+  position: fixed;
+  font-size: calc(10px + 2vmin);
+  left: -25px; /* Adjust as needed to nudge left */
 }
+  
+  /* Add any other styles you need for your app */
+
+
+
+  .connect{
+    
+    min-height: 100px;
+    position: relative;
+    font-size: calc(10px + 2vmin);
+    left: 15px; /* Adjust as needed to nudge left */
+    top: -30px;
+  }

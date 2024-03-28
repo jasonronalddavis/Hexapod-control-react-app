@@ -1,23 +1,13 @@
-import logo from './logo.svg';
-import './App.css';
-import React from 'react';
-import BluetoothController from './BlueTooth/bluetoothController.js';
-import { BrowserRouter as Router, Routes, Route} from 'react-dom/client';//import ListUsers from "../components/User/users";
-
-import './index.css';
-
+// App.js
+import React, { useState } from 'react';
+import BluetoothController from './Bluetooth/BluetoothController';
 
 function App() {
   return (
-  <div className="App">
-  <header className="App-header">
-  <h1>Hexapod Control App</h1>
-  </header>
-  <main>
-  <BluetoothController />
-  </main>
-  </div>
+    <div className="App">
+      <BluetoothController />
+    </div>
   );
-  }
-  
-  export default App;
+}
+
+export default App;

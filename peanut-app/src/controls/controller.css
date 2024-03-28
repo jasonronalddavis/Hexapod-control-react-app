@@ -5,6 +5,75 @@
     align-items: center;
     justify-content: center;
     font-size: calc(10px + 2vmin);
-    color: white;
-
+    color: rgb(0, 0, 0);
 }
+.sliders{
+    position: relative;
+    font-size: calc(10px + 2vmin);
+    left: -105px; /* Adjust as needed to nudge left */
+}
+.eyeY{
+    position: relative;
+    left: -65px; /* Adjust as needed to nudge left */
+    top: -105px; /* Adjust as needed to nudge upward */
+}
+.yLabel{
+    position: relative;
+   left: 54px;
+   top: 50px;
+    align-self: 100;
+}
+.ySlider {
+    position: relative;
+    font-size: calc(10px + 2vmin);
+    transform: rotate(270deg); /* Rotate slider vertically */
+    left: 5px; /* Adjust as needed to nudge left */
+  }
+
+
+
+  .eyelid{
+    position: relative;
+    left: 100px; /* Adjust as needed to nudge left */
+    top: -125px; /* Adjust as needed to nudge upward */
+  }
+  .lidLabel{
+    position: relative;
+    left: 145px;
+    top: 50px;
+     align-self: 100;
+  }
+  .lidSlider{
+    position: relative;
+    transform: rotate(270deg); /* Rotate slider vertically */
+  }
+  .blink{
+    position: relative;
+    left: 125px;
+    top: -250px;
+  }
+
+
+
+  .xLabel{
+    position: relative;
+    left: 105px;
+    top: 50px;
+  }
+.xSlider{
+    position: relative;
+    left: 15px;
+    top: 20px;
+}
+
+
+
+
+
+  .legs{
+    z-index: 25;
+    position: relative;
+    left: 165px;
+    top: 70px;
+  }
+

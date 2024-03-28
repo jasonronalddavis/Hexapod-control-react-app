@@ -1,4 +1,5 @@
-// bluetoothController.js
+// BluetoothController.js
+
 import React, { useState, useEffect } from 'react';
 import BluetoothService from './bluetoothServices';
 import HexapodControl from '../controls/hexapodControl.js';
@@ -15,7 +16,6 @@ const BluetoothController = () => {
       const bluetoothDevice = await BluetoothService.connect();
       setDevice(bluetoothDevice);
       setConnected(true);
-      // Set up Bluetooth characteristic event listener
       BluetoothService.subscribeToCharacteristic(bluetoothDevice, handleCharacteristicChange);
     } catch (error) {
       console.error('Bluetooth connection failed:', error);
@@ -23,7 +23,6 @@ const BluetoothController = () => {
   };
 
   useEffect(() => {
-    // Clean up function
     return () => {
       if (connected) {
         BluetoothService.disconnect(device);
@@ -41,13 +40,13 @@ const BluetoothController = () => {
 
   return (
     <div>
-      <div className="buttons">
-        <h2 className="Hex-head">Hexapod Control</h2>
-        <h2>Status: {isMoving ? 'crawl_forward' : 'crawl-stop'}</h2>
-        <HexapodControl device={device} isMoving={isMoving} />
+      <div className="bluetooth">
+        <HexapodControl device={device} />
       </div>
+      <div className="connect">
       <p>Connecting to Hexapod...</p>
       <button onClick={handleBluetoothConnect}>Connect Bluetooth</button>
+      </div>
     </div>
   );
 };
