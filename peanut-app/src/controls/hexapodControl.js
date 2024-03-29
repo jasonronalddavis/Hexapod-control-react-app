@@ -1,18 +1,30 @@
 // HexapodControl.js
 
-import React from 'react';
+import React, { useState } from 'react';
 import BluetoothService from '../Bluetooth/bluetoothServices';
 import './controller.css';
 
 const HexapodControl = ({ device }) => {
-  const handleForward = () => {
-    console.log('Device:', device);
+
+  const [crawlForward, setCrawlForward] = useState(false); // State for tracking crawling forward action
+
+  const handleCrawlStart = () => {
+    console.log('Crawling forward...');
     if (device) {
-      console.log('Transmitting command: F');
-      BluetoothService.sendCommand(device, new Uint8Array([70])); // ASCII code for 'F'
+      console.log('Transmitting command: 11');
+      BluetoothService.sendCommand(device, new Uint8Array([11])); // Send the command to start crawling forward
+      setCrawlForward(true); // Set the state to indicate crawling forward
     }
   };
 
+  const handleCrawlStop = () => {
+    console.log('Stopping crawl...');
+    if (device) {
+      console.log('Transmitting command: 14');
+      BluetoothService.sendCommand(device, new Uint8Array([13])); // Send the command to stop crawling
+      setCrawlForward(false); // Set the state to indicate not crawling
+    }
+  };
   const handleBackward = () => {
     console.log('Device:', device);
     if (device) {
@@ -98,8 +110,8 @@ const HexapodControl = ({ device }) => {
         Move Backward
       </button>
       <button
-        onMouseDown={handleForward}
-        onMouseUp={handleButtonUp}
+        onMouseDown={handleCrawlStart}
+        onMouseUp={handleCrawlStop}
       >
         Move Forward
       </button>
