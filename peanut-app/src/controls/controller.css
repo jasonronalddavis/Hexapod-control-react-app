@@ -1,22 +1,111 @@
+/* controller.css */
+
 .buttons{
-    z-index: 20;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  position: relative;
+    width: 400px;
+    top: 250px;
     font-size: calc(10px + 2vmin);
     color: rgb(0, 0, 0);
+    left: 305px; /* Adjust as needed to nudge left */
 }
+
+.rectangle {
+  position: absolute;
+  height: 20px;
+  top: 121px;
+  z-index: 85;
+  left: 48px; /* Adjust as needed to nudge left */
+}
+
+.yRectangle{
+  transform: rotate(-180deg);
+  position: absolute;
+  top: 200px;
+  right: 410px;
+  z-index: 80;
+  width: 22px;
+}
+
+.frontBar{
+  pointer-events: none;
+  position: relative;
+  top: 115px;
+  z-index: 90;
+  right: 15px; /* Adjust as needed to nudge left */
+height: 25px;
+width: 142px;
+}
+
+.xFrontBar{
+  transform: rotate(90deg);
+  pointer-events: none;
+  position: relative;
+  top: 250px;
+  right: 290px;
+  z-index: 90;
+  width: 132px;
+}
+
+.eyeContainer{
+  position: relative;
+  top: 150px;
+}
+
+.eyeWindow{
+  pointer-events: none;
+  position: absolute;
+  top:150px;
+  z-index: 55;
+  right: 160px;
+}
+
+
+.mouthWindow{
+  pointer-events: none;
+  position: absolute;
+  top:790px;
+  z-index: 55;
+  right: 160px;
+}
+
+
+
+.y-rectangle-image {
+  width: 100%;
+  height: 100%;
+}
+
+
+.rectangle-image {
+  width: 100%;
+  height: 100%;
+}
+
+.legs{
+  position: relative;
+    z-index: 60;
+    top: 550px;
+    right: 175px; /* Adjust as needed to nudge left */
+}
+
 .sliders{
     position: relative;
     font-size: calc(10px + 2vmin);
-    left: -105px; /* Adjust as needed to nudge left */
+    right: 215px; /* Adjust as needed to nudge left */
+    z-index: 20;
+    top: 250px;
+
 }
+
+
 .eyeY{
     position: relative;
     left: -65px; /* Adjust as needed to nudge left */
     top: -105px; /* Adjust as needed to nudge upward */
 }
+
+
+
 .yLabel{
     position: relative;
    left: 54px;
@@ -28,9 +117,9 @@
     font-size: calc(10px + 2vmin);
     transform: rotate(270deg); /* Rotate slider vertically */
     left: 5px; /* Adjust as needed to nudge left */
+    z-index: 20;
+
   }
-
-
 
   .eyelid{
     position: relative;
@@ -49,10 +138,11 @@
   }
   .blink{
     position: relative;
-    left: 125px;
-    top: -250px;
-  }
+    left: 205px;
+    top: 50px;
+    z-index: 90;
 
+  }
 
 
   .xLabel{
@@ -64,16 +154,14 @@
     position: relative;
     left: 15px;
     top: 20px;
+    z-index: 20;
+
 }
 
-
-
-
-
-  .legs{
-    z-index: 25;
-    position: relative;
-    left: 165px;
-    top: 70px;
-  }
+.mouth{
+  position: relative;
+  right: 210px;
+  top: 415px;
+  z-index: 55;
+}
 

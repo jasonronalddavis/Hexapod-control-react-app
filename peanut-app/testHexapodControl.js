@@ -2,26 +2,13 @@ import React, { useState, useEffect } from 'react';
 import BluetoothService from '../Bluetooth/bluetoothServices';
 import './controller.css';
 import eyeBar from '../Images/eyeBar.png';
-import eyeBarCopy from '../Images/eyeBarCopy.png';
-import eyeWindow from '../Images/eyeWindow.png';
-import FrontEyeBar from '../Images/FrontEyeBar.png';
-import mouthWindow from '../Images/mouthWindow.png';
 
-//crawlR
 const HexapodControl = ({ device }) => {
   const [scrollbarValue, setScrollbarValue] = useState(0);
   const [crawlForward, setCrawlForward] = useState(false); // State for tracking crawling forward action
-  const [crawlBackward, setCrawlBackward] = useState(false); // State for tracking crawling forward action
-  const [crawlRight, setCrawlRight] = useState(false); // State for tracking crawling forward action
-  const [width, setWidth] = useState(140); // Initial width of the rectangle
+  const [width, setWidth] = useState(200); // Initial width of the rectangle
   const [dragging, setDragging] = useState(false);
   const [startX, setStartX] = useState(null);
-  const [startY, setStartY] = useState(null);
-  const [height, setHeight] = useState(100); // Initial width of the rectangle
-  const minWidth = 20;
-  const maxWidth = 140;
-  const minHeight = 20;
-  const maxHeight = 140;
 
 
   const xBarDown = (e) => {
@@ -30,6 +17,15 @@ const HexapodControl = ({ device }) => {
   };
 
   // Effect for adjusting bar length based on scrollbar value
+  const xBarMove = (e) => {
+    if (dragging) {
+      // Calculate the change in X coordinate
+      const deltaX = e.clientX - startX;
+      // Update the rectangle width based on the change
+      setWidth((prevWidth) => prevWidth + deltaX);
+      setStartX(e.clientX); // Update the starting X coordinate for next iteration
+    }
+  };
 
 
   const xBarUp = () => {
@@ -38,115 +34,18 @@ const HexapodControl = ({ device }) => {
   };
 
 
-
-  const yBarDown = (e) => {
-    setDragging(true);
-    setStartY(e.clientY); // Store the starting X coordinate
-  };
-
-
-  const yBarUp = () => {
-    // Stop dragging when the mouse is released
-    setDragging(false);
-  };
-
-  const xBarMove = (e) => {
-    if (dragging) {
-      // Calculate the change in X coordinate
-      const deltaX = e.clientX - startX;
-      // Update the rectangle width based on the change
-      const newWidth = width + deltaX;
-      const clampedWidth = Math.min(Math.max(newWidth, minWidth), maxWidth);
-      setWidth(clampedWidth);
-
-      // Transmit the new width value via Bluetooth
-      if (device) {
-        BluetoothService.sendCommand(device, `x${clampedWidth}`);
-      }
-
-      setStartX(e.clientX);
-    }
-  };
-
-
-  const yBarMove = (e) => {
-    if (dragging) {
-      // Calculate the change in X coordinate
-      const deltaY = e.clientY - startY;
-      // Update the rectangle width based on the change
-      const newHeight = height + deltaY;
-      const clampedHeight = Math.min(Math.max(newHeight, minHeight), maxHeight);
-      setHeight(clampedHeight);
-console.log(clampedHeight);
-      // Transmit the new width value via Bluetooth
-      if (device) {
-        BluetoothService.sendCommand(device, `y${clampedHeight}`);
-      }
-
-      setStartY(e.clientY);
-    }
-};
-
   useEffect(() => {
-    const fIntervalId = setInterval(() => {
+    const intervalId = setInterval(() => {
       if (crawlForward && device) {
         console.log('Crawling forward...');
         BluetoothService.sendCommand(device, new Uint8Array([11])); // Send the command to start crawling forward
       }
     }, 20); // Adjust the interval as needed
 
-    const bIntervalId = setInterval(() => {
-      if (crawlBackward && device) {
-        console.log('Crawling backward...');
-        BluetoothService.sendCommand(device, new Uint8Array([11])); // Send the command to start crawling forward
-      }
-    }, 20);
-    const rIntervalId = setInterval(() => {
-      if (crawlRight && device) {
-        console.log('Crawling backward...');
-        BluetoothService.sendCommand(device, new Uint8Array([12])); // Send the command to start crawling forward
-      }
-    }, 20);
-
     return () => {
-      clearInterval(fIntervalId); // Clear interval on component unmount
-      clearInterval(bIntervalId);
-      clearInterval(rIntervalId);
+      clearInterval(intervalId); // Clear interval on component unmount
     };
-  }, [crawlForward, device], [crawlBackward, device], [crawlRight, device]);
-
-
-const handleRightStart = () =>{
-  console.log('Crawling backward...');
-  if (device) {
-    console.log('Transmitting command: 11');
-    const byteCommand = `X${12}`;
-    BluetoothService.sendCommand(device,byteCommand); // Send the command to start crawling forward
-    setCrawlRight(true); // Set the state to indicate crawling forward
-  }
-
-};
-
-
-  const handleBackStart = () => {
-    console.log('Crawling backward...');
-    if (device) {
-      console.log('Transmitting command: 11');
-      const byteCommand = `Z${12}`;
-      BluetoothService.sendCommand(device,byteCommand); // Send the command to start crawling forward
-      setCrawlBackward(true); // Set the state to indicate crawling forward
-    }
-  };
-
-
-  const handleBackStop = () => {
-    console.log('Stopping crawl...');
-    if (device) {
-      console.log('Transmitting command: 8');
-      BluetoothService.sendCommand(device, new Uint8Array([19])); // Send the command to stop crawling
-      setCrawlBackward(false); // Set the state to indicate not crawling
-    }
-  };
+  }, [crawlForward, device]);
 
   const handleCrawlStart = () => {
     console.log('Crawling forward...');
@@ -158,7 +57,7 @@ const handleRightStart = () =>{
     }
   };
 
-  const handleForwardStop = () => {
+  const handleCrawlStop = () => {
     console.log('Stopping crawl...');
     if (device) {
       console.log('Transmitting command: 14');
@@ -167,8 +66,14 @@ const handleRightStart = () =>{
     }
   };
 
-
-
+  // Rest of your component code...
+  const handleBackward = () => {
+    console.log('Device:', device);
+    if (device) {
+      console.log('Transmitting command: B');
+      BluetoothService.sendCommand(device, new Uint8Array([66])); // ASCII code for 'B'
+    }
+  };
   const handleStretch = () => {
     console.log('Device:', device);
     if (device) {
@@ -258,6 +163,7 @@ const handleRightStart = () =>{
   };
 
 
+
   const standUp = () => {
     console.log('Button released');
     if (device) {
@@ -269,14 +175,8 @@ const handleRightStart = () =>{
 
 
   return (
+   
     <div className="buttons">
-  <div className="eyeContainer">
-</div>
-<img src={eyeWindow} alt="rectangle" className="eyeWindow"/>
-<img src={mouthWindow} alt="rectangle" className="mouthWindow"/>
-
-<img src={FrontEyeBar} alt="rectangle" className="frontBar"/>
-<img src={FrontEyeBar} alt="rectangle" className="xFrontBar"/>
       <div
         className="rectangle"
         style={{ width: `${width}px` }}
@@ -284,50 +184,23 @@ const handleRightStart = () =>{
         onMouseMove={xBarMove}
         onMouseUp={xBarUp}
         onMouseLeave={xBarUp}
-        min="10" max="160"
       >
         <img src={eyeBar} alt="rectangle" className="rectangle-image" />
-
       </div>
-
-      <div
-        className="yRectangle"
-        style={{ height: `${height}px` }}
-        onMouseDown={yBarDown}
-        onMouseMove={yBarMove}
-        onMouseUp={yBarUp}
-        onMouseLeave={yBarUp}
-        min="10" max="160"
-      >
-        <img src={eyeBarCopy} alt="rectangle" className="y-rectangle-image" />
-      </div>
-
       
          <div className="legs">
       <button
-        onMouseDown={handleBackStart}
-        onMouseUp={handleBackStop}
+        onMouseDown={handleBackward}
+        onMouseUp={handleButtonUp}
       >
         Move Backward
       </button>
-
       <button
         onMouseDown={handleCrawlStart}
-        onMouseUp={handleForwardStop}
+        onMouseUp={handleCrawlStop}
       >
         Move Forward
       </button>
-
-      <button
-        onMouseDown={handleRightStart}
-        onMouseUp={handleForwardStop}
-      >
-        Move Right
-      </button>
-
-
-
-
       <button
         onMouseDown={handleStretch}
       >
@@ -339,10 +212,6 @@ const handleRightStart = () =>{
       >
         Stand
       </button>
-
-
-
-
 
       <button
         onMouseDown={handleBend}
@@ -365,7 +234,7 @@ const handleRightStart = () =>{
       </div>
       <div className = "eyeY">
         <label className= "yLabel">Y-Axis:</label>
-        <input className="ySlider" type="range" min="10" max="120" defaultValue="40" onChange={(e) => handleEyeballYChange(e.target.value)}/>
+        <input className="ySlider" type="range" min="10" max="90" defaultValue="40" onChange={(e) => handleEyeballYChange(e.target.value)}/>
       </div>
       <div className="eyelid">
         <label className ="lidLabel">Eyelid:</label>

@@ -1,19 +1,15 @@
-/* Add styles for the slider */
-.bluetooth{
-  position: fixed;
-  font-size: calc(10px + 2vmin);
-  left: -25px; /* Adjust as needed to nudge left */
-}
-  
-  /* Add any other styles you need for your app */
 
 
 
-  .connect{
-    
+  .connect{  
     min-height: 100px;
     position: relative;
-    font-size: calc(10px + 2vmin);
-    left: 15px; /* Adjust as needed to nudge left */
-    top: -30px;
+    font-size: 20px;
+    left: 20px; /* Adjust as needed to nudge left */
+    top: -45px;
+    z-index: 50;
+    color: rgb(255, 255, 255);
+
   }
+
+  

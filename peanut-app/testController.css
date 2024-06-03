@@ -1,0 +1,99 @@
+/* controller.css */
+
+.buttons{
+    position: relative;
+      z-index: 50;
+      width: 400px;
+      top: 250px;
+      font-size: calc(10px + 2vmin);
+      color: rgb(0, 0, 0);
+      left: 305px; /* Adjust as needed to nudge left */
+  }
+  
+  .rectangle {
+    position: relative;
+    height: 20px;
+    top:150px;
+    z-index: 85;
+  }
+  
+  .rectangle-image {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .legs{
+    position: relative;
+      z-index: 60;
+      top: 550px;
+      right: 175px; /* Adjust as needed to nudge left */
+  }
+  
+  .sliders{
+      position: relative;
+      font-size: calc(10px + 2vmin);
+      right: 215px; /* Adjust as needed to nudge left */
+      z-index: 80;
+      top: 250px;
+  
+  }
+  
+  
+  .eyeY{
+      position: relative;
+      left: -65px; /* Adjust as needed to nudge left */
+      top: -105px; /* Adjust as needed to nudge upward */
+  }
+  .yLabel{
+      position: relative;
+     left: 54px;
+     top: 50px;
+      align-self: 100;
+  }
+  .ySlider {
+      position: relative;
+      font-size: calc(10px + 2vmin);
+      transform: rotate(270deg); /* Rotate slider vertically */
+      left: 5px; /* Adjust as needed to nudge left */
+    }
+  
+    .eyelid{
+      position: relative;
+      left: 100px; /* Adjust as needed to nudge left */
+      top: -125px; /* Adjust as needed to nudge upward */
+    }
+    .lidLabel{
+      position: relative;
+      left: 145px;
+      top: 50px;
+       align-self: 100;
+    }
+    .lidSlider{
+      position: relative;
+      transform: rotate(270deg); /* Rotate slider vertically */
+    }
+    .blink{
+      position: relative;
+      left: 75px;
+      top: 50px;
+    }
+  
+  
+    .xLabel{
+      position: relative;
+      left: 105px;
+      top: 50px;
+    }
+  .xSlider{
+      position: relative;
+      left: 15px;
+      top: 20px;
+  }
+  
+  .mouth{
+    position: relative;
+    right: 170px;
+    top: 1100px;
+  }
+  
+  

@@ -1,244 +1,323 @@
-Wifi Authentication is utilized in wifiService.js. 
-
-Wi-Fi Authentication
-Network Name (SSID):
-
-Password:
-
-Connect
-Wi-Fi Authentication
-Connect. I suspect that I need to consolidate space in my app. Or some components aren't necessary. Please carefully analyze my code and determine if this is so. 
-
-
-
+// Unfortunately, my hexapdControl elements are still fixed with the scroll bar, meaning they
+//stay on the screen as I scroll up and down. I want all hexapdControl elements attached to the background, meaning
+//it should stay put as I scroll up and down. I would like to add that my background image 
+//resides in app.js and is styled using App.css  
 
 // App.js
 import React, { useState } from 'react';
-import WifiService from './wifi/wifiService.js';
-import HexapodController from './controls/hexapodControl.js';
-import WifiAuthentication from './wifi/wifiAuthentication.js';
+import BluetoothController from './Bluetooth/BluetoothController';
 
 function App() {
-  const [isWifiConnected, setWifiConnected] = useState(false);
-
-  const handleWifiConnect = () => {
-    // Implement logic to send Wi-Fi credentials to ESP8266
-    // Update isWifiConnected based on the connection result
-    setWifiConnected(true); // Replace with actual logic
-
-    // For simplicity, let's assume the connection is successful
-    console.log('Connected to Wi-Fi');
-  };
-
   return (
     <div className="App">
-      <WifiAuthentication
-        onConnect={handleWifiConnect}
-        isWifiConnected={isWifiConnected}
-      />
-      <WifiService isWifiConnected={isWifiConnected} />
-      {isWifiConnected && <HexapodController />}
+      <BluetoothController />
+      <img src={require('./Images/background.png')}/>
     </div>
   );
 }
 
 export default App;
 
+.App {
+  text-align: center;
+}
 
 
-
-// wifiService.js
-import React, { useState } from 'react';
-import axios from 'axios';
-
-const WifiService = ({ isWifiConnected, onConnect }) => {
-  const handleConnect = () => {
-    // Add any validation or error handling as needed
-    onConnect();
-  };
-
-  return (
-    <div>
-      {isWifiConnected ? (
-        <>
-          {/* Your existing Wi-Fi service UI or controls */}
-        </>
-      ) : (
-        <div>
-          <h2>Wi-Fi Authentication</h2>
-          <button onClick={handleConnect}>Connect</button>
-        </div>
-      )}
-    </div>
-  );
-};
-
-export default WifiService;
-
-
-
+// HexapodControl.js
 
 import React, { useState, useEffect } from 'react';
-import WifiService from './wifiService.js';
-import HexapodControl from '../controls/hexapodControl.js';
-import './bluetooth control.css';
+import BluetoothService from '../Bluetooth/bluetoothServices';
+import './controller.css';
 
-const WifiController = () => {
-  const [device, setDevice] = useState(null);
-  const [connected, setConnected] = useState(false);
-  const [isMoving, setIsMoving] = useState(false);
-  const [sliderValue, setSliderValue] = useState(0);
+const HexapodControl = ({ device }) => {
 
-  const handleWifiConnect = async () => {
-    console.log('Handling Wi-Fi connection...');
-    try {
-      const wifiDevice = await wifiService.connect();
-      setDevice(wifiDevice);
-      setConnected(true);
-    } catch (error) {
-      console.error('Wi-Fi connection failed:', error);
-    }
-  };
-
-  const handleDisconnect = () => {
-    WifiService.disconnect();
-    setConnected(false);
-    setDevice(null);
-  };
-
-  const handleSliderChange = async (event) => {
-    const value = event.target.value;
-    setSliderValue(value);
-
-    // Assuming you want to send 'crawl_forward' or 'crawl_backward' based on the slider value
-    const command = value === '100' ? 'crawl_forward' : 'crawl_backward';
-
-    try {
-      await wifiService.sendCommandToESP(command);
-    } catch (error) {
-      console.error('Failed to send command:', error);
-    }
-  };
+  const [crawlForward, setCrawlForward] = useState(false); // State for tracking crawling forward action
 
   useEffect(() => {
-    // Effect without cleanup function
-    console.log('Component mounted');
-    
+    const intervalId = setInterval(() => {
+      if (crawlForward && device) {
+        console.log('Crawling forward...');
+        BluetoothService.sendCommand(device, new Uint8Array([11])); // Send the command to start crawling forward
+      }
+    }, 20); // Adjust the interval as needed
+
     return () => {
-      console.log('Component unmounted');
+      clearInterval(intervalId); // Clear interval on component unmount
     };
-  }, []); // Empty dependency array means this effect runs once on mount
+  }, [crawlForward, device]);
 
-  return (
-    <div>
-      <div className="buttons">
-        <h2 className="Hex-head">Hexapod Control</h2>
-        <h2>Status: {isMoving ? 'crawl_forward' : 'crawl-stop'}</h2>
-        <HexapodControl device={device} />
-      </div>
-      <div className="slider-container">
-        <input
-          type="range"
-          min="0"
-          max="100"
-          step="1"
-          value={sliderValue}
-          onChange={handleSliderChange}
-          className="slider"
-        />
-        <p>Slider Value: {sliderValue}</p>
-      </div>
-      <button onClick={connected ? handleDisconnect : handleWifiConnect}>
-        {connected ? 'Disconnect Wi-Fi' : 'Connect Wi-Fi'}
-      </button>
-    </div>
-  );
-};
-
-export default WifiController;
-
-
-import React, { useState } from 'react';
-
-const WifiAuthentication = ({ onConnect, isWifiConnected }) => {
-  const [ssid, setSSID] = useState('');
-  const [password, setPassword] = useState('');
-
-  const handleConnect = () => {
-    // Add any validation or error handling as needed
-    onConnect();
-  };
-
-  return (
-    <div>
-      {!isWifiConnected && (
-        <>
-          <h2>Wi-Fi Authentication</h2>
-          <label>
-            Network Name (SSID):
-            <input type="text" value={ssid} onChange={(e) => setSSID(e.target.value)} />
-          </label>
-          <br />
-          <label>
-            Password:
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-          </label>
-          <br />
-          <button onClick={handleConnect}>Connect</button>
-        </>
-      )}
-    </div>
-  );
-};
-
-export default WifiAuthentication;
-
-
-import React, { useState } from 'react';
-import './controller.css';
-import axios from 'axios';
-
-const HexapodController = ({ isWifiConnected }) => {
-  const [scrollValue, setScrollValue] = useState(0);
-
-  const handleScroll = (e) => {
-    const value = e.target.value;
-    setScrollValue(value);
-
-    if (isWifiConnected) {
-      // Example: Send command to ESP8266 based on the scroll value
-      // Replace "your-esp8266-ip" with your ESP8266 module's IP address
-      axios.post('http://your-esp8266-ip/control', { command: value })
-        .then(response => {
-          // Handle response if needed
-          console.log('Command sent successfully:', response.data);
-        })
-        .catch(error => {
-          // Handle error if needed
-          console.error('Error sending command:', error);
-        });
+  const handleCrawlStart = () => {
+    console.log('Crawling forward...');
+    if (device) {
+      console.log('Transmitting command: 11');
+      const byteCommand = `F${11}`;
+      BluetoothService.sendCommand(device,byteCommand); // Send the command to start crawling forward
+      setCrawlForward(true); // Set the state to indicate crawling forward
     }
   };
 
+  const handleCrawlStop = () => {
+    console.log('Stopping crawl...');
+    if (device) {
+      console.log('Transmitting command: 14');
+      BluetoothService.sendCommand(device, new Uint8Array([19])); // Send the command to stop crawling
+      setCrawlForward(false); // Set the state to indicate not crawling
+    }
+  };
+
+  // Rest of your component code...
+  const handleBackward = () => {
+    console.log('Device:', device);
+    if (device) {
+      console.log('Transmitting command: B');
+      BluetoothService.sendCommand(device, new Uint8Array([66])); // ASCII code for 'B'
+    }
+  };
+  const handleStretch = () => {
+    console.log('Device:', device);
+    if (device) {
+      console.log('Transmitting command: S');
+      const byteCommand = `S${18}`;
+      BluetoothService.sendCommand(device,byteCommand ); // ASCII code for 'S'
+    }
+  };
+  const standLift = () => {
+    console.log('Device:', device);
+    if (device) {
+      const byteCommand = `U${13}`;
+      console.log('Transmitting command: U');
+      BluetoothService.sendCommand(device, byteCommand); // ASCII code for 'S'
+    }
+  };
+  const handleEyeballXChange = (value) => {
+    if (device) {
+      const byteCommand = `x${value}`; // Append "x" to indicate X-Axis
+      BluetoothService.sendCommand(device, byteCommand); // Send the command to adjust eyeball X-axis
+      console.log('Eyeball X-Axis:', byteCommand);
+
+    }
+  };
+  const handleEyeballYChange = (value) => {
+   if (device) {
+    const command = `y${value}`; // Construct the command string
+    BluetoothService.sendCommand(device, command); // Send the command as a string
+    console.log('Eyeball Y-Axis:', command);
+  }
+};
+  
+  const mouthDown = () => {
+    console.log('Device:', device);
+    if (device) {
+      console.log('Transmitting command: L');
+      BluetoothService.sendCommand(device, 20); // ASCII code for 'S'
+    }
+  };
+
+  const mouthUp = () => {
+    console.log('Device:', device);
+    if (device) {
+      console.log('Transmitting command: L');
+      BluetoothService.sendCommand(device, 21); // ASCII code for 'S'
+    }
+  };
+  const handleEyelidChange = (value) => {
+    console.log('Eyelid:', value);
+    if (device) {
+      const command = `e${value}`; // Command format for adjusting eyelid position
+      BluetoothService.sendCommand(device, command); // Send the command to adjust eyelid position
+    }
+  };
+  const handleBend = (value) => {
+    console.log('Device:', device);
+    if (device) {
+      console.log('Transmitting command: Bend');
+      const command = `B${14}`; // Command format for adjusting eyelid position
+      BluetoothService.sendCommand(device, command); // ASCII code for 'S'
+    }
+  };
+  const handleBlink = () => {
+    console.log('Blinking...');
+    if (device) {
+      console.log('Transmitting command: 16');
+      const command = `b${17}`; 
+      BluetoothService.sendCommand(device, command); // Send the command for blinking
+    }
+  };
+
+  const blinkDown = () => {
+    console.log('Button released');
+    if (device) {
+      console.log('Transmitting command: 15');
+      const command = `d${19}`;
+      BluetoothService.sendCommand(device, command );
+    }
+  };
+  const handleButtonUp = () => {
+    console.log('Button released');
+    if (device) {
+      console.log('Transmitting command: 15');
+      const command = `U${19}`;
+      BluetoothService.sendCommand(device, command );
+    }
+  };
+
+
+
+  const standUp = () => {
+    console.log('Button released');
+    if (device) {
+      console.log('Transmitting command: Stnd12');
+      const command = `T${10}`;
+      BluetoothService.sendCommand(device, command);
+    }
+  };
   return (
-    <div>
-      {isWifiConnected ? (
-        <>
-          <h2>Hexapod Controller</h2>
-          <label>
-            Scroll Value:
-            <input type="range" min="0" max="100" value={scrollValue} onChange={handleScroll} />
-          </label>
-          {/* Add other controls or display as needed */}
-        </>
-      ) : (
-        <div>
-          <h2>Wi-Fi Not Connected</h2>
-          <p>Please connect to Wi-Fi to control the hexapod.</p>
-        </div>
-      )}
+    <div className="buttons">
+         <div className="legs">
+      <button
+        onMouseDown={handleBackward}
+        onMouseUp={handleButtonUp}
+      >
+        Move Backward
+      </button>
+      <button
+        onMouseDown={handleCrawlStart}
+        onMouseUp={handleCrawlStop}
+      >
+        Move Forward
+      </button>
+      <button
+        onMouseDown={handleStretch}
+      >
+        Stretch
+      </button>
+      <button
+        onMouseDown={standLift}
+        onMouseUp={standUp}
+      >
+        Stand
+      </button>
+
+      <button
+        onMouseDown={handleBend}
+      >
+        Bend
+      </button>
+      </div>
+      <div className = "mouth">
+        <button
+        onMouseDown={mouthDown}
+        onMouseUp={mouthUp}
+      >
+      Mouth
+      </button>
+      </div>
+      <div className='sliders'>
+      <div>
+        <label className= "xLabel" >X-Axis:</label>
+        <input className="xSlider" type="range" min="10" max="160" defaultValue="40" onChange={(e) => handleEyeballXChange(e.target.value)}/>
+      </div>
+      <div className = "eyeY">
+        <label className= "yLabel">Y-Axis:</label>
+        <input className="ySlider" type="range" min="10" max="90" defaultValue="40" onChange={(e) => handleEyeballYChange(e.target.value)}/>
+      </div>
+      <div className="eyelid">
+        <label className ="lidLabel">Eyelid:</label>
+        <input className="lidSlider" type="range" min="10" max="160" onChange={(e) => handleEyelidChange(e.target.value)}/>
+      </div>
+     <button className="blink" onMouseDown={handleBlink} onMouseUp={blinkDown}>
+  Blink
+</button>
+
+    </div>
     </div>
   );
-};
+  };
 
-export default HexapodController;
+export default HexapodControl;
+
+
+.buttons{
+  z-index: 20;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: rgb(0, 0, 0);
+
+
+}
+.sliders{
+  position: relative;
+  font-size: calc(10px + 2vmin);
+  left: -105px; /* Adjust as needed to nudge left */
+}
+.eyeY{
+  position: relative;
+  left: -65px; /* Adjust as needed to nudge left */
+  top: -105px; /* Adjust as needed to nudge upward */
+}
+.yLabel{
+  position: relative;
+ left: 54px;
+ top: 50px;
+  align-self: 100;
+}
+.ySlider {
+  position: relative;
+  font-size: calc(10px + 2vmin);
+  transform: rotate(270deg); /* Rotate slider vertically */
+  left: 5px; /* Adjust as needed to nudge left */
+}
+
+.eyelid{
+  position: relative;
+  left: 100px; /* Adjust as needed to nudge left */
+  top: -125px; /* Adjust as needed to nudge upward */
+}
+.lidLabel{
+  position: relative;
+  left: 145px;
+  top: 50px;
+   align-self: 100;
+}
+.lidSlider{
+  position: relative;
+  transform: rotate(270deg); /* Rotate slider vertically */
+}
+.blink{
+  position: relative;
+  left: 125px;
+  top: -250px;
+}
+
+
+.xLabel{
+  position: relative;
+  left: 105px;
+  top: 50px;
+}
+.xSlider{
+  position: relative;
+  left: 15px;
+  top: 20px;
+}
+
+.mouth{
+position: relative;
+left: 100px;
+top: 80px;
+}
+
+
+
+.legs{
+  z-index: 25;
+  position: relative;
+  left: 255px;
+  top: 150px;
+}
+
+
+
