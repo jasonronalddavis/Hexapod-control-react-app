@@ -1,3 +1,5 @@
+/* App.css */
+
 .App {
   text-align: center;
 
@@ -6,8 +8,8 @@
 
 .backGround{
   z-index: 0;
-  top: -150px;
-  position: relative;
-
+  top: 10px;
+  position: absolute;
+left: 50px;
 }
 
