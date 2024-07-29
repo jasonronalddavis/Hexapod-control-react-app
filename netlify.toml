@@ -1,7 +1,7 @@
 [build]
-  publish = "peanut-app/build"
-  command = "npm run build"
-  base = "peanut-app"
+  command = "CI='' npm run build"
+  publish = "/build"
+  base ="/"
 
 [[redirects]]
   from = "/*"
