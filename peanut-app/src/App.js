@@ -1,7 +1,7 @@
 // App.js
 import React, {useState} from 'react';
 import BluetoothController from './bluetooth/bluetoothcontroller.js';
-import './app.css';
+import './appstyle.css';
 
 function App() {
   return (
