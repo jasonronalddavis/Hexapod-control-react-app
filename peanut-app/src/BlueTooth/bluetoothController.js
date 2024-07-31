@@ -1,8 +1,8 @@
 // BluetoothController.js
 
 import React, { useState, useEffect } from 'react';
-// import BluetoothService from './bluetoothservices.js';
-import HexapodControl from '../controls/hexapodcontrol.js';
+import BluetoothService from './bluetoothservices.js';
+import HexapodControl from '../controls/hexapodcontroller.js';
 import './bluetooth control.css';
 
 const BluetoothController = () => {
