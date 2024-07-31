@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import BluetoothService from '../bluetooth/bluetoothservicer';
+import BluetoothService from '../bluetoothcomp/bluetoothservicer';
 import './controller.css';
 import eyeBar from '../Images/eyeBar.png';
 import eyeBarCopy from '../Images/eyeBarCopy.png';
