@@ -8,7 +8,7 @@ function App() {
     <div className="App">
       <BluetoothController />
       <img className="backGround" src={require('./Images/background.png')}/>
-      {/* home */}
+      {/* Home */}
     </div>
   );
 }
