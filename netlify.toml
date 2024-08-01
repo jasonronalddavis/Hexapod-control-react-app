@@ -1,6 +1,7 @@
 [build]
   publish = "peanut-app/build"
   command = "yarn build"
+  build = "build"
 
 [[redirects]]
   from = "/*"
