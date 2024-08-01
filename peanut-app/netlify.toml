@@ -1,0 +1,9 @@
+[build]
+  publish = "peanut-app/build"
+  command = "npm run build"
+  base = "peanut-app"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
