@@ -1,5 +1,6 @@
 // BluetoothService.js
-import React, { useState } from 'react';
+//server
+//Assign
 class BluetoothService {
   async connect() {
     try {
@@ -10,6 +11,7 @@ class BluetoothService {
 
       const server = await device.gatt.connect();
       console.log('Connected to Hexapod:', device.name);
+      console.log('Server:', server);
       return device;
     } catch (error) {
       console.error('Bluetooth connection failed:', error);
@@ -58,4 +60,4 @@ class BluetoothService {
   }
 }
 
-export default new BluetoothService();
+export default BluetoothService;

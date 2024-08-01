@@ -44,9 +44,10 @@ const BluetoothController = () => {
         <HexapodControl device={device} />
       </div>
       <div className="connect">
-      <p>Connecting to Hexapod...</p>
-      <button onClick={handleBluetoothConnect}>Connect Bluetooth</button>
+        <p>Connecting to Hexapod...</p>
+        <button onClick={handleBluetoothConnect}>Connect Bluetooth</button>
       </div>
+      {isMoving && <p>Hexapod is moving...</p>}
     </div>
   );
 };
