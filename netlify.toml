@@ -1,7 +1,7 @@
 [build]
-  publish = "peanut-app/build"
+  publish = "peanutapp/build"
   command = "yarn build"
-  base = "peanut-app"
+  base = "peanutapp"
   build = "build"
 
 [[redirects]]
