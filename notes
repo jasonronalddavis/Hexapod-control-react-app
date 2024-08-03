@@ -1,33 +1,18 @@
 First time deploying an app to Netlify. It is a bluetooth app for controlling
-my Hexapod Robot. It works fine on my Mac Chrome web browser and the build is successful. However, I cannot
-resolve an error: Module not found: Error: Can't resolve './bluetooth/bluetoothcontroller.js' in '/opt/build/repo/peanut-app/src'.
-Why would Netlify not recognize my import if the statement is correct?
+my Hexapod Robot. It works fine on my Mac Chrome web browser and the build is successful. However, the
+app fails upon deployment. I believethe issue lies within my netlify.toml. It does not
+recognize my build folder.
 
-App.js:
-// App.js
-import React, {useState} from 'react';
-import BluetoothController from './bluetooth/bluetoothcontroller.js';
-import './App.css';
+github reference: 
+https://github.com/jasonronalddavis/Hexapod-control-react-app
 
-function App() {
-  return (
-    <div className="App">
-      <BluetoothController />
-      <img className="backGround" src={require('./Images/background.png')}/>
-      {/* Home */}
-    </div>
-  );
-}
-
-export default App;
-
-
-netlift.toml
+netlify.toml
 
 [build]
-  publish = "peanut-app/build"
-  command = "npm run build"
-  base = "peanut-app"
+  publish = "peanutapp/build"
+  command = "yarn build"
+  base = "peanutapp"
+  build = "build"
 
 [[redirects]]
   from = "/*"
@@ -35,77 +20,45 @@ netlift.toml
   status = 200
 
 
-Build log:
-9:34:32 PM: Netlify Build                                                 
-9:34:32 PM: ────────────────────────────────────────────────────────────────
-9:34:32 PM: ​
-9:34:32 PM: ❯ Version
-9:34:32 PM:   @netlify/build 29.51.3
-9:34:32 PM: ​
-9:34:32 PM: ❯ Flags
-9:34:32 PM:   baseRelDir: true
-9:34:32 PM:   buildId: 66a9a291c6bb863bc6661035
-9:34:32 PM:   deployId: 66a9a29166ca2c0008288538
-9:34:33 PM: ​
-9:34:33 PM: ❯ Current directory
-9:34:33 PM:   /opt/build/repo/peanut-app
-9:34:33 PM: ​
-9:34:33 PM: ❯ Config file
-9:34:33 PM:   /opt/build/repo/netlify.toml
-9:34:33 PM: ​
-9:34:33 PM: ❯ Context
-9:34:33 PM:   production
-9:34:33 PM: ​
-9:34:33 PM: build.command from netlify.toml                               
-9:34:33 PM: ────────────────────────────────────────────────────────────────
-9:34:33 PM: ​
-9:34:33 PM: $ npm run build
-9:34:33 PM: > peanut-app@0.1.0 build
-9:34:33 PM: > react-scripts build
-9:34:34 PM: Creating an optimized production build...
-9:34:34 PM: Failed to compile.
-9:34:34 PM: 
-9:34:34 PM: Module not found: Error: Can't resolve './bluetooth/bluetoothcontroller.js' in '/opt/build/repo/peanut-app/src'
-9:34:34 PM: ​
-9:34:34 PM: "build.command" failed                                        
-9:34:34 PM: ────────────────────────────────────────────────────────────────
-9:34:34 PM: ​
-9:34:34 PM:   Error message
-9:34:34 PM:   Command failed with exit code 1: npm run build (https://ntl.fyi/exit-code-1)
-9:34:34 PM: ​
-9:34:34 PM:   Error location
-9:34:34 PM:   In build.command from netlify.toml:
-9:34:34 PM:   npm run build
-9:34:34 PM: ​
-9:34:34 PM:   Resolved config
-9:34:34 PM:   build:
-9:34:34 PM:     base: /opt/build/repo/peanut-app
-9:34:34 PM:     command: npm run build
-9:34:34 PM:     commandOrigin: config
-9:34:34 PM:     environment:
-9:34:34 PM:       - INCOMING_HOOK_BODY
-9:34:34 PM:       - INCOMING_HOOK_TITLE
-9:34:34 PM:       - INCOMING_HOOK_URL
-9:34:34 PM:     publish: /opt/build/repo/peanut-app/peanut-app/build
-9:34:34 PM:     publishOrigin: config
-9:34:34 PM:   redirects:
-9:34:35 PM:     - from: /*
+
+Deploy Log:
+
+ 1:39:46 AM: Deploy site                                                   
+1:39:46 AM: ────────────────────────────────────────────────────────────────
+1:39:46 AM: ​
+1:39:46 AM: Section completed: deploying
+1:39:46 AM: ​
+1:39:46 AM: Configuration error                                           
+1:39:46 AM: ────────────────────────────────────────────────────────────────
+1:39:46 AM: ​
+1:39:46 AM:   Error message
+1:39:46 AM:   Deploy did not succeed: Deploy directory 'peanutapp/peanutapp/build' does not exist
+1:39:46 AM: ​
+1:39:46 AM:   Resolved config
+1:39:46 AM:   build:
+1:39:46 AM:     base: /opt/build/repo/peanutapp
+1:39:46 AM:     command: yarn build
+1:39:46 AM:     commandOrigin: config
+1:39:46 AM:     environment:
+1:39:46 AM:       - INCOMING_HOOK_BODY
+1:39:46 AM:       - INCOMING_HOOK_TITLE
+1:39:46 AM:       - INCOMING_HOOK_URL
+1:39:46 AM:     publish: /opt/build/repo/peanutapp/peanutapp/build
+1:39:46 AM:     publishOrigin: config
+1:39:46 AM:   redirects:
+1:39:47 AM: Failed during stage 'building site': Build script returned non-zero exit code: 2 (https://ntl.fyi/exit-code-2)
+1:39:47 AM:     - from: /*
       status: 200
       to: /index.html
   redirectsOrigin: config
-9:34:35 PM: Build failed due to a user error: Build script returned non-zero exit code: 2
-9:34:35 PM: Failing build: Failed to build site
-9:34:35 PM: Finished processing build request in 32.318s
-9:34:35 PM: Failed during stage 'building site': Build script returned non-zero exit code: 2 (https://ntl.fyi/exit-code-2)
+1:39:47 AM: Build failed due to a user error: Build script returned non-zero exit code: 2
+1:39:47 AM: Failing build: Failed to build site
 
 
 
 
-
-Diagnosis: The build failure is due to a module not being found in the project.
-Solution: To resolve this error, you need to ensure that the module 
-'./bluetooth/bluetoothcontroller.js' is available in the specified location 
-'/opt/build/repo/peanut-app/src'. Check if the file exists in the correct path 
-and if its import is properly configured in the project. Make sure the path is 
-correct and the file is included in the project source files. Fixing the path or 
-adding the missing file should resolve this issue.
+Diagnosis: The build failed because the deploy directory specified in the build settings does not exist.
+Solution: Update the publish directory path in the Netlify configuration to point to the correct
+directory where the build artifacts are located. In this case, the correct publish path 
+should be /opt/build/repo/peanutapp/build instead of /opt/build/repo/peanutapp/peanutapp/build. 
+This will ensure that Netlify can locate the built files and deploy the site successfully.
