@@ -36,55 +36,25 @@ const HexapodControl = ({ device }) => {
     }
   };
 
-  const handleLeftStart = () => {
-    console.log('Crawling left...');
-    startCrawl('L');
-  };
+  const handleLeftStart = () => startCrawl('L');
+  const handleLeftStop = () => stopCrawl('L');
 
-  const handleLeftStop = () => {
-    console.log('Stopping crawl left...');
-    stopCrawl('L');
-  };
+  const handleRightStart = () => startCrawl('R');
+  const handleRightStop = () => stopCrawl('R');
 
-  const handleRightStart = () => {
-    console.log('Crawling right...');
-    startCrawl('R');
-  };
+  const handleBackStart = () => startCrawl('Z');
+  const handleBackStop = () => stopCrawl('Z');
 
-  const handleRightStop = () => {
-    console.log('Stopping crawl right...');
-    stopCrawl('R');
-  };
-
-  const handleBackStart = () => {
-    console.log('Crawling backward...');
-    startCrawl('Z');
-  };
-
-  const handleBackStop = () => {
-    console.log('Stopping crawl backward...');
-    stopCrawl('Z');
-  };
-
-  const handleForwardStart = () => {
-    console.log('Crawling forward...');
-    startCrawl('F');
-  };
-
-  const handleForwardStop = () => {
-    console.log('Stopping crawl forward...');
-    stopCrawl('F');
-  };
+  const handleForwardStart = () => startCrawl('F');
+  const handleForwardStop = () => stopCrawl('F');
 
   const handleStretch = () => {
-    console.log('Stretching...');
     if (device) {
       BluetoothService.sendCommand(device, 'S');
     }
   };
 
   const handleMouseUp = () => {
-    console.log('Mouse released - executing lift and stretch...');
     if (device) {
       BluetoothService.sendCommand(device, 'U');
       setTimeout(() => {
@@ -94,42 +64,36 @@ const HexapodControl = ({ device }) => {
   };
 
   const standLift = () => {
-    console.log('Lifting and standing...');
     if (device) {
       BluetoothService.sendCommand(device, 'U');
     }
   };
 
   const standUp = () => {
-    console.log('Standing...');
     if (device) {
       BluetoothService.sendCommand(device, 'T');
     }
   };
 
   const mouthDown = () => {
-    console.log('Mouth down...');
     if (device) {
       BluetoothService.sendCommand(device, 'L20');
     }
   };
 
   const mouthUp = () => {
-    console.log('Mouth up...');
     if (device) {
       BluetoothService.sendCommand(device, 'L21');
     }
   };
 
   const handleBend = () => {
-    console.log('Bending...');
     if (device) {
       BluetoothService.sendCommand(device, 'B');
     }
   };
 
   const handleBlink = () => {
-    console.log('Blinking...');
     if (device) {
       BluetoothService.sendCommand(device, 'd');
     }
@@ -153,9 +117,7 @@ const HexapodControl = ({ device }) => {
     }
   };
 
-  const xBarUp = () => {
-    setDragging(false);
-  };
+  const xBarUp = () => setDragging(false);
 
   const yBarDown = (e) => {
     setDragging(true);
@@ -175,10 +137,7 @@ const HexapodControl = ({ device }) => {
     }
   };
 
-  const yBarUp = () => {
-    setDragging(false);
-  };
-
+  const yBarUp = () => setDragging(false);
   return (
     <div className="buttons">
       <div className="eyeContainer"></div>
@@ -186,7 +145,7 @@ const HexapodControl = ({ device }) => {
       <img src={mouthWindow} alt="rectangle" className="mouthWindow" />
       <img src={FrontEyeBar} alt="rectangle" className="yFrontBar" />
       <img src={FrontEyeBar} alt="rectangle" className="frontBar" />
-
+  
       <div
         className="xrectangle"
         style={{ width: `${width}px` }}
@@ -194,12 +153,15 @@ const HexapodControl = ({ device }) => {
         onMouseMove={xBarMove}
         onMouseUp={xBarUp}
         onMouseLeave={xBarUp}
+        onTouchStart={xBarDown} // Handle touch start
+        onTouchMove={xBarMove}  // Handle touch move
+        onTouchEnd={xBarUp}     // Handle touch end
         min="10"
         max="160"
       >
         <img src={eyeBar} alt="rectangle" className="x-rectangle-image" />
       </div>
-
+  
       <div
         className="yRectangle"
         style={{ height: `${height}px` }}
@@ -207,87 +169,104 @@ const HexapodControl = ({ device }) => {
         onMouseMove={yBarMove}
         onMouseUp={yBarUp}
         onMouseLeave={yBarUp}
+        onTouchStart={yBarDown} // Handle touch start
+        onTouchMove={yBarMove}  // Handle touch move
+        onTouchEnd={yBarUp}     // Handle touch end
         min="10"
         max="160"
       >
         <img src={eyeBarCopy} alt="rectangle" className="y-rectangle-image" />
       </div>
-
+  
       <div className="legs">
         <button
           className="backward_button"
           onMouseDown={handleBackStart}
           onMouseUp={handleBackStop}
+          onTouchStart={handleBackStart}  // Handle touch start
+          onTouchEnd={handleBackStop}     // Handle touch end
         >
-          <img
-            src={crawl_backward}
-            alt="rectangle"
-            className="crawlbackward"
-          />
+          <img src={crawl_backward} alt="rectangle" className="crawlbackward" />
         </button>
-
+  
         <button
           className="forward_button"
           onMouseDown={handleForwardStart}
           onMouseUp={handleForwardStop}
+          onTouchStart={handleForwardStart}  // Handle touch start
+          onTouchEnd={handleForwardStop}     // Handle touch end
         >
           <img src={crawl_forward} alt="rectangle" className="crawlforward" />
         </button>
-
+  
         <button
           className="right_button"
           onMouseDown={handleRightStart}
           onMouseUp={handleRightStop}
+          onTouchStart={handleRightStart}  // Handle touch start
+          onTouchEnd={handleRightStop}     // Handle touch end
         >
           <img src={crawl_right} alt="rectangle" className="crawlright" />
         </button>
-
+  
         <button
           className="left_button"
           onMouseDown={handleLeftStart}
           onMouseUp={handleLeftStop}
+          onTouchStart={handleLeftStart}  // Handle touch start
+          onTouchEnd={handleLeftStop}     // Handle touch end
         >
           <img src={crawl_left} alt="rectangle" className="crawlleft" />
         </button>
       </div>
-
+  
       <div className="bend">
         <button
           className="bend_button"
           onMouseDown={handleBend}
           onMouseUp={handleMouseUp}
+          onTouchStart={handleBend}  // Handle touch start
+          onTouchEnd={handleMouseUp} // Handle touch end
         >
           <img src={squat_down} alt="rectangle" className="bendbutton" />
         </button>
-
+  
         <button
           className="stand_button"
           onMouseDown={standLift}
           onMouseUp={standUp}
+          onTouchStart={standLift}  // Handle touch start
+          onTouchEnd={standUp}      // Handle touch end
         >
           <img src={stand_image} alt="rectangle" className="standbutton" />
         </button>
-
+  
         <button
           className="mouth_button"
           onMouseDown={mouthDown}
           onMouseUp={mouthUp}
+          onTouchStart={mouthDown}  // Handle touch start
+          onTouchEnd={mouthUp}      // Handle touch end
         >
           <img src={mouth} alt="rectangle" className="mouthbutton" />
         </button>
-
-        <button className="stretch_button" onMouseDown={handleStretch}>
-          <img
-            src={stretch_image}
-            alt="rectangle"
-            className="stretcher"
-          />
+  
+        <button
+          className="stretch_button"
+          onMouseDown={handleStretch}
+          onTouchStart={handleStretch}  // Handle touch start
+        >
+          <img src={stretch_image} alt="rectangle" className="stretcher" />
         </button>
       </div>
-
+  
       <div className="eyebar"></div>
       <img src={body_window} alt="rectangle" className="bodyWindow" />
-      <button className="blink_button" onClick={handleBlink}>
+      <button
+        className="blink_button"
+        onClick={handleBlink}
+        onTouchStart={handleBlink}  // Handle touch start
+      >
         <img src={blink_button} alt="rectangle" className="blinkbutton" />
       </button>
       <div className="xrectangle"></div>
