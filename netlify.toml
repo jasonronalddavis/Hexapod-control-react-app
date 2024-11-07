@@ -2,8 +2,15 @@
   publish = "build"
   command = "yarn build"
   base = "peanutapp"
+  functions = "netlify/functions"  # Add this line to specify where your serverless functions are located
 
 [[redirects]]
-  from = "/*"
+  from = "/api/*"                  # Redirect API requests to the serverless functions
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/*"                       # Keep the existing redirect for all other routes
   to = "/index.html"
   status = 200
+

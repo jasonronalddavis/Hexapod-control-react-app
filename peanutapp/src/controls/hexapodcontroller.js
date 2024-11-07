@@ -77,13 +77,13 @@ const HexapodControl = ({ device }) => {
 
   const mouthDown = () => {
     if (device) {
-      BluetoothService.sendCommand(device, 'L20');
+      BluetoothService.sendCommand(device, '20');
     }
   };
 
   const mouthUp = () => {
     if (device) {
-      BluetoothService.sendCommand(device, 'L21');
+      BluetoothService.sendCommand(device, '21');
     }
   };
 
@@ -96,6 +96,11 @@ const HexapodControl = ({ device }) => {
   const handleBlink = () => {
     if (device) {
       BluetoothService.sendCommand(device, 'd');
+    }
+  };
+  const handleBlinkUp = () => {
+    if (device) {
+      BluetoothService.sendCommand(device, 'e');
     }
   };
 
@@ -139,9 +144,9 @@ const HexapodControl = ({ device }) => {
 
   const yBarUp = () => setDragging(false);
   return (
-    <div className="buttons">
-      <div className="eyeContainer"></div>
-      <img src={eyeWindow} alt="rectangle" className="eyeWindow" />
+    <div className= "buttons">
+      <div className="eyeContainer"> </div>
+      <img src={eyeWindow} alt="rectangle" className="eyeWindow"/>
       <img src={mouthWindow} alt="rectangle" className="mouthWindow" />
       <img src={FrontEyeBar} alt="rectangle" className="yFrontBar" />
       <img src={FrontEyeBar} alt="rectangle" className="frontBar" />
@@ -264,7 +269,7 @@ const HexapodControl = ({ device }) => {
       <img src={body_window} alt="rectangle" className="bodyWindow" />
       <button
         className="blink_button"
-        onClick={handleBlink}
+        onTouchEnd={handleBlinkUp}
         onTouchStart={handleBlink}  // Handle touch start
       >
         <img src={blink_button} alt="rectangle" className="blinkbutton" />
