@@ -2,7 +2,7 @@
   publish = "build"
   command = "yarn build"
   base = "peanutapp"
-  functions = "netlify/functions"  # Add this line to specify where your serverless functions are located
+  functions = "src/netlify/functions"  # Add this line to specify where your serverless functions are located
 
 [[redirects]]
   from = "/api/*"                  # Redirect API requests to the serverless functions
