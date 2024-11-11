@@ -1,12 +1,15 @@
 [build]
-  publish = "build"
   command = "yarn build"
-  base = "peanutapp"
-  functions = "netlify/functions"  # Ensure there is no trailing slash
+  publish = "build"
+  functions = "netlify/functions"
 
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"
   status = 200
+  force = true
 
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
 
